@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { Link } from 'react-router-dom'
 import { fetchLeads } from '../services/api'
 import { EyeIcon, PencilIcon } from '@heroicons/react/24/outline'
 

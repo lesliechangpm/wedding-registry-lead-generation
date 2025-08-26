@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { fetchCampaigns } from '../services/api'
 import { PlusIcon, PlayIcon, PauseIcon, EyeIcon } from '@heroicons/react/24/outline'
@@ -74,7 +73,7 @@ export default function Campaigns() {
         </div>
         <div className="card">
           <div className="text-2xl font-bold text-gray-900">
-            {campaigns?.length > 0 
+            {campaigns?.length && campaigns.length > 0 
               ? calculateOpenRate(
                   campaigns.reduce((sum, c) => sum + c.total_opens, 0),
                   campaigns.reduce((sum, c) => sum + c.total_sends, 0)

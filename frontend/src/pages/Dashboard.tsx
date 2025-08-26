@@ -4,7 +4,7 @@ import {
   HeartIcon,
   CheckCircleIcon,
   CurrencyDollarIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
   ClockIcon
 } from '@heroicons/react/24/outline'
 import { fetchDashboardMetrics, fetchLeadsByStage } from '../services/api'
@@ -92,7 +92,7 @@ export default function Dashboard() {
         <MetricCard
           title="Conversion Rate"
           value={`${metrics?.conversion_rate || 0}%`}
-          icon={TrendingUpIcon}
+          icon={ArrowTrendingUpIcon}
           change="+2.1%"
           changeType="positive"
         />
@@ -103,7 +103,7 @@ export default function Dashboard() {
         <MetricCard
           title="Avg Lead Score"
           value={metrics?.average_lead_score?.toFixed(1) || '0'}
-          icon={TrendingUpIcon}
+          icon={ArrowTrendingUpIcon}
         />
         <MetricCard
           title="Ready for Contact"

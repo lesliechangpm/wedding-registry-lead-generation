@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useQuery } from 'react-query'
 import toast from 'react-hot-toast'
 
 export default function Settings() {
