@@ -1,0 +1,338 @@
+/* Wedding Registry Integration - Design System */
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+/* CSS Custom Properties for Wedding Theme */
+:root {
+  /* Primary - Deep Navy */
+  --navy-50: #f0f4f8;
+  --navy-100: #d9e2ec;
+  --navy-200: #bcccdc;
+  --navy-300: #9fb3c8;
+  --navy-400: #829ab1;
+  --navy-500: #627d98;
+  --navy-600: #486581;
+  --navy-700: #334e68;
+  --navy-800: #243b53;
+  --navy-900: #1e3a5f;
+  --navy-950: #102a43;
+
+  /* Secondary - Rose Gold */
+  --rose-gold-50: #fdf2f8;
+  --rose-gold-100: #fce7f3;
+  --rose-gold-200: #fbcfe8;
+  --rose-gold-300: #f9a8d4;
+  --rose-gold-400: #f472b6;
+  --rose-gold-500: #e8b4a0;
+  --rose-gold-600: #db7093;
+  --rose-gold-700: #be185d;
+  --rose-gold-800: #9d174d;
+  --rose-gold-900: #831843;
+
+  /* Accent - Sage Green */
+  --sage-50: #f0f9f0;
+  --sage-100: #dcf2dc;
+  --sage-200: #bbe5bb;
+  --sage-300: #9caf88;
+  --sage-400: #7a9a6e;
+  --sage-500: #5a7c5a;
+  --sage-600: #456745;
+  --sage-700: #385438;
+  --sage-800: #2d422d;
+  --sage-900: #243624;
+
+  /* Status Colors */
+  --forest-500: #2d5a3d;
+  --forest-600: #1f4529;
+  --forest-700: #143319;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  --amber-700: #b45309;
+  --burgundy-500: #991b1b;
+  --burgundy-600: #7f1d1d;
+  --burgundy-700: #6b1717;
+
+  /* Typography */
+  --font-header: 'Inter', 'Poppins', system-ui, sans-serif;
+  --font-body: 'Open Sans', 'Source Sans Pro', system-ui, sans-serif;
+  --font-accent: 'Playfair Display', Georgia, serif;
+
+  /* Spacing */
+  --border-radius-wedding: 4px;
+  --border-radius-wedding-lg: 8px;
+
+  /* Shadows */
+  --shadow-wedding: 0 1px 3px 0 rgba(30, 58, 95, 0.1), 0 1px 2px 0 rgba(30, 58, 95, 0.06);
+  --shadow-wedding-lg: 0 4px 6px -1px rgba(30, 58, 95, 0.1), 0 2px 4px -1px rgba(30, 58, 95, 0.06);
+  --shadow-wedding-xl: 0 10px 15px -3px rgba(30, 58, 95, 0.1), 0 4px 6px -2px rgba(30, 58, 95, 0.05);
+}
+
+/* Base Typography Classes */
+.text-header {
+  font-family: var(--font-header);
+}
+
+.text-body {
+  font-family: var(--font-body);
+}
+
+.text-accent {
+  font-family: var(--font-accent);
+}
+
+/* Component Base Classes */
+.card {
+  @apply bg-white dark:bg-gray-800 rounded-wedding-lg shadow-wedding-lg border border-warm-gray-200 dark:border-gray-700 p-6;
+}
+
+.card-compact {
+  @apply bg-white dark:bg-gray-800 rounded-wedding shadow-wedding border border-warm-gray-200 dark:border-gray-700 p-4;
+}
+
+/* Button System */
+.btn-base {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-wedding transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply btn-base bg-navy-900 text-white hover:bg-navy-800 focus:ring-navy-500 active:bg-navy-950;
+}
+
+.btn-secondary {
+  @apply btn-base bg-rose-gold-500 text-white hover:bg-rose-gold-600 focus:ring-rose-gold-400 active:bg-rose-gold-700;
+}
+
+.btn-accent {
+  @apply btn-base bg-sage-300 text-sage-900 hover:bg-sage-400 focus:ring-sage-300 active:bg-sage-500;
+}
+
+.btn-outline-primary {
+  @apply btn-base border-2 border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white focus:ring-navy-500;
+}
+
+.btn-outline-secondary {
+  @apply btn-base border-2 border-rose-gold-500 text-rose-gold-500 hover:bg-rose-gold-500 hover:text-white focus:ring-rose-gold-400;
+}
+
+.btn-ghost {
+  @apply btn-base text-navy-900 hover:bg-navy-50 focus:ring-navy-500;
+}
+
+.btn-success {
+  @apply btn-base bg-forest-500 text-white hover:bg-forest-600 focus:ring-forest-500 active:bg-forest-700;
+}
+
+.btn-warning {
+  @apply btn-base bg-amber-500 text-white hover:bg-amber-600 focus:ring-amber-500 active:bg-amber-700;
+}
+
+.btn-danger {
+  @apply btn-base bg-burgundy-500 text-white hover:bg-burgundy-600 focus:ring-burgundy-500 active:bg-burgundy-700;
+}
+
+/* Input System */
+.input-base {
+  @apply block w-full px-3 py-2 border border-warm-gray-300 rounded-wedding shadow-sm placeholder-warm-gray-400 focus:outline-none focus:ring-navy-500 focus:border-navy-500 text-sm;
+}
+
+.input-error {
+  @apply input-base border-burgundy-500 focus:border-burgundy-500 focus:ring-burgundy-500;
+}
+
+.input-success {
+  @apply input-base border-forest-500 focus:border-forest-500 focus:ring-forest-500;
+}
+
+/* Floating Label Inputs */
+.floating-input {
+  @apply relative;
+}
+
+.floating-input input {
+  @apply input-base pt-6 pb-2;
+}
+
+.floating-input label {
+  @apply absolute left-3 top-2 text-xs text-warm-gray-500 font-medium transition-all;
+}
+
+.floating-input input:focus + label,
+.floating-input input:not(:placeholder-shown) + label {
+  @apply text-navy-600 transform scale-90 -translate-y-1;
+}
+
+/* Badge System */
+.badge-base {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.badge-primary {
+  @apply badge-base bg-navy-100 text-navy-800;
+}
+
+.badge-secondary {
+  @apply badge-base bg-rose-gold-100 text-rose-gold-800;
+}
+
+.badge-accent {
+  @apply badge-base bg-sage-100 text-sage-800;
+}
+
+.badge-success {
+  @apply badge-base bg-green-100 text-green-800;
+}
+
+.badge-warning {
+  @apply badge-base bg-yellow-100 text-yellow-800;
+}
+
+.badge-danger {
+  @apply badge-base bg-red-100 text-red-800;
+}
+
+/* Table System */
+.table-wedding {
+  @apply min-w-full divide-y divide-warm-gray-200;
+}
+
+.table-wedding thead {
+  @apply bg-warm-gray-50;
+}
+
+.table-wedding th {
+  @apply px-6 py-3 text-left text-xs font-medium text-warm-gray-500 uppercase tracking-wider;
+}
+
+.table-wedding tbody {
+  @apply bg-white divide-y divide-warm-gray-200;
+}
+
+.table-wedding td {
+  @apply px-6 py-4 whitespace-nowrap text-sm text-warm-gray-900;
+}
+
+/* Progress System */
+.progress-bar {
+  @apply w-full bg-warm-gray-200 rounded-full h-2.5;
+}
+
+.progress-fill {
+  @apply h-2.5 rounded-full transition-all duration-300;
+}
+
+.progress-primary {
+  @apply bg-navy-900;
+}
+
+.progress-secondary {
+  @apply bg-rose-gold-500;
+}
+
+.progress-accent {
+  @apply bg-sage-300;
+}
+
+.progress-success {
+  @apply bg-forest-500;
+}
+
+/* Wedding-specific Decorative Elements */
+.wedding-gradient {
+  background: linear-gradient(135deg, var(--navy-900) 0%, var(--rose-gold-500) 100%);
+}
+
+.wedding-gradient-light {
+  background: linear-gradient(135deg, var(--navy-100) 0%, var(--rose-gold-100) 100%);
+}
+
+.wedding-pattern {
+  background-image: radial-gradient(circle at 2px 2px, var(--rose-gold-200) 1px, transparent 0);
+  background-size: 20px 20px;
+  opacity: 0.1;
+}
+
+/* Animation Classes */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design Helpers */
+.card-grid {
+  @apply grid gap-6;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.metric-grid {
+  @apply grid gap-6;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+/* Dark Mode Adjustments */
+.dark .card,
+.dark .card-compact {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .table-wedding thead {
+  @apply bg-gray-800;
+}
+
+.dark .table-wedding th {
+  @apply text-gray-400;
+}
+
+.dark .table-wedding tbody {
+  @apply bg-gray-800 divide-gray-700;
+}
+
+.dark .table-wedding td {
+  @apply text-gray-100;
+}
+
+.dark .input-base {
+  @apply bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400;
+}
+
+.dark .floating-input label {
+  @apply text-gray-400;
+}
+
+.dark .floating-input input:focus + label,
+.dark .floating-input input:not(:placeholder-shown) + label {
+  @apply text-navy-400;
+}
