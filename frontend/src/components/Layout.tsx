@@ -40,7 +40,7 @@ export default function Layout({ children }: LayoutProps) {
               <HeartIcon className="h-5 w-5 text-rose-gold-600" />
             </div>
             <span className="ml-2 text-xl font-bold text-navy-900 dark:text-white font-header">
-              WeddingLead
+              VowCRM
             </span>
           </div>
           <div className="mt-8 flex-grow flex flex-col">

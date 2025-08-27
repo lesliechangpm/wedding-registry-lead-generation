@@ -85,8 +85,8 @@ const Login: React.FC = () => {
                 <HeartIcon className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold font-header">WeddingLead</h1>
-                <p className="text-sm opacity-90">Mortgage Solutions</p>
+                <h1 className="text-2xl font-bold font-header">VowCRM</h1>
+                <p className="text-sm opacity-90">Wedding Mortgage Solutions</p>
               </div>
             </div>
 
@@ -142,8 +142,8 @@ const Login: React.FC = () => {
                 <HeartIcon className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold font-header text-navy-900">WeddingLead</h1>
-                <p className="text-sm text-warm-gray-600">Mortgage Solutions</p>
+                <h1 className="text-xl font-bold font-header text-navy-900">VowCRM</h1>
+                <p className="text-sm text-warm-gray-600">Wedding Mortgage Solutions</p>
               </div>
             </div>
 

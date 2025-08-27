@@ -1,7 +1,7 @@
-# Wedding Registry Integration Tool
+# VowCRM - Wedding-Focused CRM Platform
 
 ## Overview
-A comprehensive Wedding Registry Integration system that connects with wedding planning platforms to identify and engage newly engaged/married couples with targeted home loan opportunities.
+VowCRM is a comprehensive wedding-focused CRM system that connects with wedding planning platforms to identify and engage newly engaged/married couples with targeted home loan opportunities.
 
 ## Project Structure
 

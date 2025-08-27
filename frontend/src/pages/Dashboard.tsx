@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import {
   UserGroupIcon,
@@ -9,10 +10,14 @@ import {
   CalendarDaysIcon,
   ChartBarIcon,
   BellIcon,
-  PlusIcon
+  PlusIcon,
+  EnvelopeIcon,
+  PhoneIcon,
+  BanknotesIcon,
+  MapPinIcon
 } from '@heroicons/react/24/outline'
 import { fetchDashboardMetrics, fetchLeadsByStage } from '../services/api'
-import { Card, CardHeader, CardBody, Button, Badge, LoadingSpinner } from '../components/ui'
+import { Card, CardHeader, CardBody, Button, Badge, LoadingSpinner, Modal, ModalHeader, ModalBody, ModalFooter, Input } from '../components/ui'
 import { clsx } from 'clsx'
 
 interface MetricCardProps {
@@ -88,6 +93,115 @@ export default function Dashboard() {
     'leads-by-stage',
     fetchLeadsByStage
   )
+
+  // Modal state management
+  const [isAddLeadModalOpen, setIsAddLeadModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    partner1_name: '',
+    partner2_name: '',
+    email: '',
+    phone: '',
+    wedding_date: '',
+    venue_location: '',
+    platform: '',
+    estimated_loan_amount: '',
+    priority: 'medium' as const,
+    notes: '',
+    contact_preference: 'email' as const,
+    home_purchase_timeline: '',
+    combined_income: '',
+    credit_score_range: '',
+    loan_type_preference: ''
+  })
+
+  // Form handling functions
+  const handleFormChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const resetForm = () => {
+    setFormData({
+      partner1_name: '',
+      partner2_name: '',
+      email: '',
+      phone: '',
+      wedding_date: '',
+      venue_location: '',
+      platform: '',
+      estimated_loan_amount: '',
+      priority: 'medium',
+      notes: '',
+      contact_preference: 'email',
+      home_purchase_timeline: '',
+      combined_income: '',
+      credit_score_range: '',
+      loan_type_preference: ''
+    })
+  }
+
+  const generateLeadScore = (data: typeof formData): number => {
+    let score = 50 // Base score
+    
+    // Higher income increases score
+    if (data.combined_income) {
+      const income = parseInt(data.combined_income.replace(/\D/g, ''))
+      if (income >= 150000) score += 30
+      else if (income >= 100000) score += 20
+      else if (income >= 75000) score += 10
+    }
+    
+    // Credit score impact
+    if (data.credit_score_range === '800+') score += 25
+    else if (data.credit_score_range === '750-799') score += 20
+    else if (data.credit_score_range === '700-749') score += 15
+    else if (data.credit_score_range === '650-699') score += 10
+    
+    // Timeline urgency
+    if (data.home_purchase_timeline === 'Immediate') score += 20
+    else if (data.home_purchase_timeline === 'Within 6 months') score += 15
+    else if (data.home_purchase_timeline === 'Within 1 year') score += 10
+    
+    // Platform quality
+    if (['The Knot', 'Zola'].includes(data.platform)) score += 10
+    
+    return Math.min(Math.max(score, 0), 100)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000))
+
+      // In a real app, this would create the lead via API
+      console.log('New lead created:', {
+        couple_name: `${formData.partner1_name} & ${formData.partner2_name}`,
+        email: formData.email,
+        phone: formData.phone,
+        wedding_date: formData.wedding_date,
+        venue_location: formData.venue_location,
+        platform: formData.platform || 'Manual Entry',
+        lead_score: generateLeadScore(formData),
+        estimated_loan_amount: parseInt(formData.estimated_loan_amount.replace(/\D/g, '')) || 0,
+        priority: formData.priority,
+        notes: formData.notes
+      })
+
+      setIsAddLeadModalOpen(false)
+      resetForm()
+      
+      // Show success message or refresh data
+      alert('Lead successfully added!')
+    } catch (error) {
+      console.error('Error adding lead:', error)
+      alert('Error adding lead. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   // Mock data for demonstration
   const currentTime = new Date().toLocaleString('en-US', {
@@ -168,7 +282,11 @@ export default function Dashboard() {
           <Button variant="outline-primary" leftIcon={<BellIcon className="w-4 h-4" />}>
             3 Notifications
           </Button>
-          <Button variant="primary" leftIcon={<PlusIcon className="w-4 h-4" />}>
+          <Button 
+            variant="primary" 
+            leftIcon={<PlusIcon className="w-4 h-4" />}
+            onClick={() => setIsAddLeadModalOpen(true)}
+          >
             Add Lead
           </Button>
         </div>
@@ -230,7 +348,7 @@ export default function Dashboard() {
         {/* Card 2: Recent Wedding Leads */}
         <Card className="lg:col-span-2">
           <CardHeader 
-            title="Recent Wedding Leads"
+            title="Recent VowCRM Leads"
             subtitle="Latest couples with action items"
             action={
               <Button variant="ghost" size="sm">View All</Button>
@@ -376,6 +494,269 @@ export default function Dashboard() {
           </CardBody>
         </Card>
       </div>
+
+      {/* Add Manual Lead Modal */}
+      <Modal 
+        isOpen={isAddLeadModalOpen} 
+        onClose={() => {
+          setIsAddLeadModalOpen(false)
+          resetForm()
+        }}
+        size="lg"
+      >
+        <ModalHeader
+          title="Add Manual Lead"
+          subtitle="Enter lead information for manual follow-up"
+          onClose={() => {
+            setIsAddLeadModalOpen(false)
+            resetForm()
+          }}
+        />
+        <ModalBody>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Couple Information */}
+            <div>
+              <h3 className="text-lg font-semibold text-navy-900 dark:text-white mb-4 font-header">
+                <HeartIcon className="w-5 h-5 inline mr-2 text-rose-gold-600" />
+                Couple Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Partner 1 Name"
+                  placeholder="First partner's name"
+                  value={formData.partner1_name}
+                  onChange={(e) => handleFormChange('partner1_name', e.target.value)}
+                  required
+                />
+                <Input
+                  label="Partner 2 Name"
+                  placeholder="Second partner's name"
+                  value={formData.partner2_name}
+                  onChange={(e) => handleFormChange('partner2_name', e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Contact Information */}
+            <div>
+              <h3 className="text-lg font-semibold text-navy-900 dark:text-white mb-4 font-header">
+                <EnvelopeIcon className="w-5 h-5 inline mr-2 text-navy-600" />
+                Contact Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Email Address"
+                  type="email"
+                  placeholder="couple@email.com"
+                  value={formData.email}
+                  onChange={(e) => handleFormChange('email', e.target.value)}
+                  required
+                />
+                <Input
+                  label="Phone Number"
+                  type="tel"
+                  placeholder="(555) 123-4567"
+                  value={formData.phone}
+                  onChange={(e) => handleFormChange('phone', e.target.value)}
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                  <label className="block text-sm font-medium text-warm-gray-700 dark:text-gray-300 mb-1">
+                    Contact Preference
+                  </label>
+                  <select
+                    value={formData.contact_preference}
+                    onChange={(e) => handleFormChange('contact_preference', e.target.value)}
+                    className="input-base"
+                  >
+                    <option value="email">Email</option>
+                    <option value="phone">Phone</option>
+                    <option value="text">Text Message</option>
+                    <option value="both">Email & Phone</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-warm-gray-700 dark:text-gray-300 mb-1">
+                    Priority Level
+                  </label>
+                  <select
+                    value={formData.priority}
+                    onChange={(e) => handleFormChange('priority', e.target.value)}
+                    className="input-base"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Wedding Information */}
+            <div>
+              <h3 className="text-lg font-semibold text-navy-900 dark:text-white mb-4 font-header">
+                <CalendarDaysIcon className="w-5 h-5 inline mr-2 text-rose-gold-600" />
+                Wedding Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Wedding Date"
+                  type="date"
+                  value={formData.wedding_date}
+                  onChange={(e) => handleFormChange('wedding_date', e.target.value)}
+                />
+                <Input
+                  label="Venue/Location"
+                  placeholder="City, State or Venue Name"
+                  value={formData.venue_location}
+                  onChange={(e) => handleFormChange('venue_location', e.target.value)}
+                />
+              </div>
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-warm-gray-700 dark:text-gray-300 mb-1">
+                  Source Platform
+                </label>
+                <select
+                  value={formData.platform}
+                  onChange={(e) => handleFormChange('platform', e.target.value)}
+                  className="input-base"
+                >
+                  <option value="">Select Platform</option>
+                  <option value="The Knot">The Knot</option>
+                  <option value="Zola">Zola</option>
+                  <option value="WeddingWire">WeddingWire</option>
+                  <option value="Joy">Joy</option>
+                  <option value="Referral">Referral</option>
+                  <option value="Walk-in">Walk-in</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Financial Information */}
+            <div>
+              <h3 className="text-lg font-semibold text-navy-900 dark:text-white mb-4 font-header">
+                <BanknotesIcon className="w-5 h-5 inline mr-2 text-forest-600" />
+                Financial Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Estimated Loan Amount"
+                  placeholder="$500,000"
+                  value={formData.estimated_loan_amount}
+                  onChange={(e) => handleFormChange('estimated_loan_amount', e.target.value)}
+                />
+                <Input
+                  label="Combined Annual Income"
+                  placeholder="$120,000"
+                  value={formData.combined_income}
+                  onChange={(e) => handleFormChange('combined_income', e.target.value)}
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                  <label className="block text-sm font-medium text-warm-gray-700 dark:text-gray-300 mb-1">
+                    Credit Score Range
+                  </label>
+                  <select
+                    value={formData.credit_score_range}
+                    onChange={(e) => handleFormChange('credit_score_range', e.target.value)}
+                    className="input-base"
+                  >
+                    <option value="">Select Range</option>
+                    <option value="800+">800+ (Excellent)</option>
+                    <option value="750-799">750-799 (Very Good)</option>
+                    <option value="700-749">700-749 (Good)</option>
+                    <option value="650-699">650-699 (Fair)</option>
+                    <option value="600-649">600-649 (Poor)</option>
+                    <option value="<600">Below 600</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-warm-gray-700 dark:text-gray-300 mb-1">
+                    Loan Type Preference
+                  </label>
+                  <select
+                    value={formData.loan_type_preference}
+                    onChange={(e) => handleFormChange('loan_type_preference', e.target.value)}
+                    className="input-base"
+                  >
+                    <option value="">Select Type</option>
+                    <option value="Conventional">Conventional</option>
+                    <option value="FHA">FHA</option>
+                    <option value="VA">VA</option>
+                    <option value="USDA">USDA</option>
+                    <option value="Jumbo">Jumbo</option>
+                    <option value="First-time Buyer">First-time Buyer Program</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Timeline & Notes */}
+            <div>
+              <h3 className="text-lg font-semibold text-navy-900 dark:text-white mb-4 font-header">
+                <MapPinIcon className="w-5 h-5 inline mr-2 text-sage-600" />
+                Purchase Timeline & Notes
+              </h3>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-warm-gray-700 dark:text-gray-300 mb-1">
+                  Home Purchase Timeline
+                </label>
+                <select
+                  value={formData.home_purchase_timeline}
+                  onChange={(e) => handleFormChange('home_purchase_timeline', e.target.value)}
+                  className="input-base"
+                >
+                  <option value="">Select Timeline</option>
+                  <option value="Immediate">Immediate (Ready to buy now)</option>
+                  <option value="Within 6 months">Within 6 months</option>
+                  <option value="Within 1 year">Within 1 year</option>
+                  <option value="After wedding">After wedding</option>
+                  <option value="1-2 years">1-2 years from now</option>
+                  <option value="Just exploring">Just exploring options</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-warm-gray-700 dark:text-gray-300 mb-1">
+                  Additional Notes
+                </label>
+                <textarea
+                  value={formData.notes}
+                  onChange={(e) => handleFormChange('notes', e.target.value)}
+                  placeholder="Any additional information about this lead..."
+                  rows={4}
+                  className="w-full px-3 py-2 border border-warm-gray-300 dark:border-gray-600 rounded-wedding shadow-sm placeholder-warm-gray-400 focus:outline-none focus:border-navy-500 focus:ring-navy-500 transition-colors duration-200 text-warm-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700"
+                />
+              </div>
+            </div>
+          </form>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setIsAddLeadModalOpen(false)
+              resetForm()
+            }}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+            loading={isSubmitting}
+          >
+            {isSubmitting ? 'Adding Lead...' : 'Add Lead'}
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   )
 }

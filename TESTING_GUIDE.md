@@ -1,4 +1,4 @@
-# 🧪 Wedding Registry Integration - Testing Guide
+# 🧪 VowCRM - Testing Guide
 
 ## 🚀 Quick Start Testing
 
